@@ -1,0 +1,161 @@
+:root {
+  --brand-gradient: linear-gradient(135deg, #7B2FF2, #00C8E0);
+}
+
+.app {
+  max-width: 520px;
+  width: 100%;
+  margin: 40px auto;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+.app h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.25rem;
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.app .subtitle {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+}
+
+.event-form {
+  background: #1e293b;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-clip: padding-box;
+  position: relative;
+}
+
+.event-form::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #7B2FF2 0%, #00C8E0 100%);
+  z-index: -1;
+  opacity: 0.4;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left;
+}
+
+.form-group input,
+.form-group select {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  /* Peguei esse SVG de arrow pronto de um projeto antigo meu */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.5rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #00C8E0;
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, #7B2FF2, #00C8E0);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 0.5rem;
+}
+
+.btn-submit:hover { opacity: 0.85; }
+.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.result-card {
+  margin-top: 1.5rem;
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.result-card.safe {
+  background: #064e3b;
+  border: 2px solid #10b981;
+  color: #6ee7b7;
+}
+
+.result-card.alert {
+  background: #7f1d1d;
+  border: 2px solid #ef4444;
+  color: #fca5a5;
+  animation: blink 0.8s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.result-card .card-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+  margin-bottom: 0.25rem;
+}
+
+.result-card .card-details {
+  font-size: 0.8rem;
+  font-weight: 400;
+  margin-top: 0.5rem;
+  opacity: 0.7;
+}
+
+.error-msg {
+  margin-top: 1rem;
+  background: #451a03;
+  border: 1px solid #f97316;
+  color: #fed7aa;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
