@@ -49,7 +49,7 @@ class EventType(str, Enum):
     parado = "parado"
     queda = "queda"
     inatividade_prolongada = "inatividade_prolongada"
-    invasao_perimetro = "invasão_perimetro"
+    invasao_perimetro = "invasao_perimetro"
 
 
 # tipos que disparam alerta
