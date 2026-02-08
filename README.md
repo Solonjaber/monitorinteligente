@@ -1,6 +1,6 @@
 # Monitoramento Inteligente
 
-Teste técnico - Monitoramento Tecnologia
+Teste técnico - Monitoramento Inteligente
 
 Sistema de ingestão de eventos de câmeras com processamento de regras de alerta, persistência local e interface de monitoramento em tempo real.
 
