@@ -1,7 +1,7 @@
 """
 anglis_alertas_api.py
 API REST - Sistema de Alertas Anglis
-v1.2 - 2026-06-18
+v1.3 - 2026-06-18
 
 Endpoints:
   GET  /health
@@ -19,6 +19,8 @@ Endpoints:
   POST /api/alertas/telefones            -> cria telefone
   PUT  /api/alertas/telefones/{id}       -> atualiza telefone
   DELETE /api/alertas/telefones/{id}     -> remove telefone
+  GET  /api/presence/residentes          -> pares distintos (residente, comodo) de presence_summary
+  GET  /api/presence/eventos             -> eventos de um residente+comodo especifico
 """
 
 import os
@@ -570,6 +572,72 @@ def remover_telefone(telefone_id: int):
             if cur.rowcount == 0:
                 raise HTTPException(status_code=404, detail="Telefone nao encontrado.")
     return {"success": True}
+
+# ---------------------------------------------------------------------------
+# Presence Summary
+# ---------------------------------------------------------------------------
+
+@app.get("/api/presence/residentes")
+def listar_residentes():
+    """Retorna pares distintos (residente, comodo) para popular os selects do painel."""
+    with get_conn() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(
+                """
+                SELECT residente, comodo
+                FROM presence_summary
+                WHERE evento ILIKE 'reporte:%%'
+                GROUP BY residente, comodo
+                ORDER BY residente, comodo
+                """
+            )
+            rows = cur.fetchall()
+
+    # Agrupa comodos por residente
+    mapa: dict = {}
+    for r in rows:
+        nome = r["residente"]
+        comodo = r["comodo"]
+        if nome not in mapa:
+            mapa[nome] = []
+        mapa[nome].append(comodo)
+
+    return [{"residente": k, "comodos": v} for k, v in sorted(mapa.items())]
+
+
+@app.get("/api/presence/eventos")
+def listar_eventos_presence(
+    residente: str = Query(...),
+    comodo: str = Query(...),
+):
+    """Retorna eventos de presence_summary para um residente e comodo especificos."""
+    with get_conn() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(
+                """
+                SELECT id, residente, comodo, area, evento,
+                       tempo_inicial, tempo_final
+                FROM presence_summary
+                WHERE residente = %s
+                  AND comodo = %s
+                  AND evento ILIKE 'reporte:%%'
+                ORDER BY tempo_inicial DESC
+                """,
+                (residente, comodo),
+            )
+            rows = cur.fetchall()
+
+    result = []
+    for r in rows:
+        row = dict(r)
+        if row.get("tempo_inicial"):
+            row["tempo_inicial"] = row["tempo_inicial"].isoformat()
+        if row.get("tempo_final"):
+            row["tempo_final"] = row["tempo_final"].isoformat()
+        result.append(row)
+
+    return result
+
 
 # ---------------------------------------------------------------------------
 # Entrada
